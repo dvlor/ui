@@ -1,0 +1,81 @@
+@import '../style/theme/index.less';
+@import '../style/mixins/index.less';
+
+@btn-prefix-cls: ~'@{class-prefix}-button';
+
+.@{btn-prefix-cls} {
+  .transition();
+  box-sizing: border-box;
+  display: inline-block;
+  padding: calc(@font-size-base - 6px) calc(@font-size-base - 4px);
+  cursor: pointer;
+  border-radius: 3px;
+  color: @text-color;
+  border: solid 1px @border-color-base;
+  font-size: @font-size-base;
+  background-color: @white;
+
+  &:hover {
+    border-color: @primary-color;
+    color: @primary-color;
+  }
+
+  &:active {
+    border-color: @primary-color-active;
+  }
+
+  + .@{btn-prefix-cls}{
+    margin-left: calc(@font-size-base / 2);
+  }
+
+  &.@{btn-prefix-cls}-primary{
+    background-color: @primary-color;
+    color: @white;
+    border: solid 1px @primary-color;
+
+    &:hover {
+      background-color: @primary-color-hover;
+      border-color: @primary-color-hover;
+    }
+
+    &:active {
+      background-color: @primary-color-active;
+      border-color: @primary-color-active;
+    }
+  }
+  &.@{btn-prefix-cls}-dashed{
+    border-style: dashed;
+
+    &:hover {
+      border-color: @primary-color;
+      color: @primary-color;
+    }
+
+    &:active {
+      border-color: @primary-color-active;
+    }
+  }
+  &.@{btn-prefix-cls}-link{
+    color: @primary-color;
+    border-width: 0;
+
+     &:hover {
+      color: @primary-color-hover;
+      text-decoration: underline;
+    }
+
+    &:active {
+      color: @primary-color-active;
+    }
+  }
+  &.@{btn-prefix-cls}-text{
+    color: @text-color;
+    border-width: 0;
+    &:active {
+      background-color: @item-hover-bg;
+    }
+  }
+  &.@{btn-prefix-cls}-ghost{
+    background-color: transparent;
+  }
+}

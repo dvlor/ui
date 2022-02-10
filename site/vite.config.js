@@ -1,5 +1,8 @@
 import { defineConfig } from 'vite'
+import path from 'path'
 import vue from '@vitejs/plugin-vue'
+import vueJsx from '@vitejs/plugin-vue-jsx'
+import docs from '../plugins/docs'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ command, mode }) => {
@@ -7,13 +10,25 @@ export default defineConfig(({ command, mode }) => {
     base: '/',
     root: './',
     mode,
-    plugins: [vue()],
+    plugins: [vueJsx(), docs(), vue()],
     publicDir: './public',
     cacheDir: './.vite',
     clearScreen: true,
     envDir: 'root',
     // 以 envPrefix 开头的环境变量会通过 import.meta.env 暴露在你的客户端源码中。
     envPrefix: 'VITE_',
+    resolve: {
+      alias: {
+        ui: path.resolve(__dirname, '../components')
+      }
+    },
+    css: {
+      preprocessorOptions: {
+        less: {
+          javascriptEnabled: true
+        }
+      }
+    },
     server: {
       host: '0.0.0.0',
       port: '3000'
