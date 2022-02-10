@@ -1,16 +1,14 @@
-const fileRegex = /components\/(.*)\/example\/.*\.vue$/
+import { splitVueTemplate } from './convertDoc'
 
-let flag = false
+const fileRegex = /components\/(.*)\/example\/.*\.vue$/
 
 export default function myPlugin() {
   return {
     name: 'transform-file',
     transform(src, id) {
       if (fileRegex.test(id)) {
-        if (flag) {
-        }
         return {
-          code: src.match(/<template>(.*\s*)*<\/template>/)[0],
+          code: splitVueTemplate(src),
           map: null // 如果可行将提供 source map
         }
       }

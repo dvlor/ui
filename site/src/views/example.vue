@@ -1,8 +1,4 @@
 <template>
-  123
-  <!-- <router-view /> -->
-  <Demo />
+  <router-view />
 </template>
-<script setup>
-import Demo from '../../../components/button/example/index.vue'
-</script>
+<script setup></script>

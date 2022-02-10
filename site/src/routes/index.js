@@ -8,7 +8,17 @@ export const routes = VueRouter.createRouter({
     {
       path: '/components',
       component: () => import('../views/example.vue'),
-      children: exampleRoutes
+      children: [
+        {
+          path: '',
+          component: () => import('../views/components.vue')
+        },
+        ...exampleRoutes
+      ]
+    },
+    {
+      path: '/:pathMatch(.*)',
+      component: () => import('../views/404.vue')
     }
   ]
 })

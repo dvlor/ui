@@ -17,9 +17,9 @@ There are `primary` button, `default` button, `dashed` button, `text` button and
 </docs>
 
 <template>
-  <a-button type="primary">Primary Button</a-button>
-  <a-button>Default Button</a-button>
-  <a-button type="dashed">Dashed Button</a-button>
-  <a-button type="text">Text Button</a-button>
-  <a-button type="link">Link Button</a-button>
+  <u-button type="primary">Primary Button</u-button>
+  <u-button>Default Button</u-button>
+  <u-button type="dashed">Dashed Button</u-button>
+  <u-button type="text">Text Button</u-button>
+  <u-button type="link">Link Button</u-button>
 </template>
