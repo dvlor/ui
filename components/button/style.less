@@ -14,14 +14,25 @@
   border: solid 1px @border-color-base;
   font-size: @font-size-base;
   background-color: @white;
+  position: relative;
 
-  &:hover {
+  &.@{btn-prefix-cls}-block{
+    display: block;
+    text-align: center;
+    + .@{btn-prefix-cls}.@{btn-prefix-cls}-block{
+      margin-left: unset;
+      margin-top: calc(@font-size-base / 2);
+    }
+  }
+
+  &:hover:not(.@{btn-prefix-cls}-disabled) {
     border-color: @primary-color;
     color: @primary-color;
   }
 
-  &:active {
+  &:active:not(.@{btn-prefix-cls}-disabled) {
     border-color: @primary-color-active;
+    color: @primary-color-active;
   }
 
   + .@{btn-prefix-cls}{
@@ -33,49 +44,85 @@
     color: @white;
     border: solid 1px @primary-color;
 
-    &:hover {
+    &:hover:not(.@{btn-prefix-cls}-disabled) {
       background-color: @primary-color-hover;
       border-color: @primary-color-hover;
+      color: @white;
     }
 
-    &:active {
+    &:active:not(.@{btn-prefix-cls}-disabled)  {
       background-color: @primary-color-active;
       border-color: @primary-color-active;
+    }
+    &.@{btn-prefix-cls}-ghost {
+      color: @primary-color;
+      &:hover:not(.@{btn-prefix-cls}-disabled) {
+        border-color: @primary-color-hover;
+        color: @primary-color-hover;
+      }
+
+      &:active:not(.@{btn-prefix-cls}-disabled)  {
+        border-color: @primary-color-active;
+        color: @primary-color-active;
+      }
     }
   }
   &.@{btn-prefix-cls}-dashed{
     border-style: dashed;
 
-    &:hover {
+    &:hover:not(.@{btn-prefix-cls}-disabled) {
       border-color: @primary-color;
       color: @primary-color;
     }
 
-    &:active {
+    &:active:not(.@{btn-prefix-cls}-disabled) {
       border-color: @primary-color-active;
+    }
+
+    &.@{btn-prefix-cls}-disabled {
+      color: @disabled-color;
+      background-color: @disabled-bg;
+      border-color: @disabled-color;
     }
   }
   &.@{btn-prefix-cls}-link{
     color: @primary-color;
     border-width: 0;
 
-     &:hover {
+     &:hover:not(.@{btn-prefix-cls}-disabled) {
       color: @primary-color-hover;
       text-decoration: underline;
     }
 
-    &:active {
+    &:active:not(.@{btn-prefix-cls}-disabled) {
       color: @primary-color-active;
+    }
+
+    &.@{btn-prefix-cls}-disabled{
+      background-color: transparent;
     }
   }
   &.@{btn-prefix-cls}-text{
     color: @text-color;
     border-width: 0;
-    &:active {
+
+
+    &:active:not(.@{btn-prefix-cls}-disabled) {
       background-color: @item-hover-bg;
+    }
+
+    &.@{btn-prefix-cls}-disabled{
+      background-color: transparent;
     }
   }
   &.@{btn-prefix-cls}-ghost{
-    background-color: transparent;
+    background-color: transparent !important;
+  }
+  
+  &.@{btn-prefix-cls}-disabled{
+    cursor: not-allowed;
+    color: @disabled-color;
+    background-color: @disabled-bg;
+    border-color: @disabled-color;
   }
 }

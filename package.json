@@ -2,8 +2,9 @@
   "name": "test",
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite serve site",
-    "test": "cross-env NODE_ENV=test jest"
+    "dev": "pnpm routes && vite serve site",
+    "test": "cross-env NODE_ENV=test jest",
+    "routes": "node ./scripts/routes.js"
   },
   "config": {
     "prefix": "u",

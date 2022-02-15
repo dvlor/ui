@@ -1,13 +1,13 @@
-<script setup>
-import { ref } from 'vue'
+<script>
+import { defineComponent } from 'vue'
 
-defineProps({
-  msg: String
+export default defineComponent({
+  data() {
+    return { showCode: false, show: false }
+  },
+  props: { desc: String, order: String, title: String, example: String }
 })
-
-const count = ref(0)
 </script>
-a
 
 <template>
   <div class="demo-box">
@@ -15,11 +15,16 @@ a
       <slot />
     </div>
     <div class="title">
-      <h3>按钮类型</h3>
+      <h3>{{ title }}</h3>
     </div>
-    <div class="summary">按钮有五种类型：主按钮、次按钮、虚线按钮、文本按钮和链接按钮。主按钮在同一个操作区域最多出现一次。</div>
-    <div class="tool"></div>
-    <div class="coding"></div>
+    <div class="summary">{{ desc }}</div>
+    <div class="tool">
+      <u-button type="text" @click="show = !show">
+        <u-icon style="font-size: 20px" v-show="show" type="xianshi" />
+        <u-icon style="font-size: 20px" v-show="!show" type="yincang" />
+      </u-button>
+    </div>
+    <pre v-show="show" class="coding">{{ example }}</pre>
   </div>
 </template>
 
@@ -30,9 +35,9 @@ a
 .demo-box {
   border: solid 1px @border-color-split;
   text-align: left;
+  border-radius: 4px;
   .example {
     padding: 30px @padding-h;
-    border-radius: 4px;
   }
   .title {
     height: 1px;
@@ -52,10 +57,12 @@ a
   }
   .tool {
     padding: 15px @padding-h;
+    font-size: 18px;
   }
 
   .coding {
-    padding: 30px @padding-h;
+    overflow: auto;
+    padding: 0 @padding-h 30px;
   }
 }
 </style>

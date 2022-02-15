@@ -17,9 +17,13 @@ There are `primary` button, `default` button, `dashed` button, `text` button and
 </docs>
 
 <template>
-  <u-button type="primary">Primary Button</u-button>
-  <u-button>Default Button</u-button>
-  <u-button type="dashed">Dashed Button</u-button>
-  <u-button type="text">Text Button</u-button>
-  <u-button type="link">Link Button</u-button>
+  <demo-box>
+    <u-button type="primary">Primary Button</u-button>
+    <u-button>Default Button</u-button>
+    <u-button type="dashed">Dashed Button</u-button>
+    <u-button type="text">Text Button</u-button>
+    <u-button type="link" href="https://v3.cn.vuejs.org/guide/composition-api-setup.html#%E4%BD%BF%E7%94%A8%E6%B8%B2%E6%9F%93%E5%87%BD%E6%95%B0" tagrt="_blink"
+      >Link Button</u-button
+    >
+  </demo-box>
 </template>

@@ -2,6 +2,7 @@ import { emits, PropTypes } from '../_utils/vueExtend'
 import { defineComponent, ExtractPropTypes, PropType } from 'vue'
 import { installWrap } from '../_utils/types'
 import { Prefix } from '../_utils/prefix'
+import { ripple } from '../_utils/ripple'
 
 const props = () => ({
   // 大小
@@ -19,6 +20,7 @@ const props = () => ({
   // 类型
   type: PropTypes.oneOf(['default', 'primary', 'dashed', 'link', 'text']),
   danger: PropTypes.bool,
+  block: PropTypes.bool,
   ghost: PropTypes.bool,
   href: PropTypes.string,
   target: PropTypes.string,
@@ -32,12 +34,19 @@ export type ButtonProp = Partial<ExtractPropTypes<ReturnType<typeof props>>>
 export const Button = installWrap(
   'button',
   defineComponent({
+    components: { ripple },
     emits: emits(['click']),
     props: props(),
     slots: ['icon'],
     setup(props, { emit }) {
       const handleClick = (e: MouseEvent) => {
-        e.stopPropagation()
+        // e.stopPropagation()
+        if (props.disabled) {
+          return
+        }
+        if (props.type == 'link' && props.href) {
+          window.open(props.href, props.target || 'self')
+        }
         emit('click')
       }
 
@@ -45,18 +54,28 @@ export const Button = installWrap(
         [`${Prefix.classPrefix}button`]: true,
         [`${Prefix.classPrefix}button-danger`]: props.danger,
         [`${Prefix.classPrefix}button-${props.type}`]: !!props.type,
-        [`${Prefix.classPrefix}button-ghost`]: !!props.ghost
+        [`${Prefix.classPrefix}button-ghost`]: !!props.ghost,
+        [`${Prefix.classPrefix}button-disabled`]: !!props.disabled,
+        [`${Prefix.classPrefix}button-block`]: !!props.block
       }
 
       return {
         handleClick,
+        showRipple: props.type !== 'text' && props.type !== 'link' && !props.disabled,
         prop: {
           class: className
         }
       }
     },
     render() {
-      return (
+      return this.showRipple ? (
+        <ripple>
+          <div {...this.prop} onClick={this.handleClick}>
+            {this.$slots.icon && this.$slots.icon()}
+            {this.$slots.default()}
+          </div>
+        </ripple>
+      ) : (
         <div {...this.prop} onClick={this.handleClick}>
           {this.$slots.icon && this.$slots.icon()}
           {this.$slots.default()}
