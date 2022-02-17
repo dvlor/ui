@@ -15,7 +15,28 @@ const tsConfig = Object.assign(
     declaration: true,
     allowSyntheticDefaultImports: true
   },
-  require('../../tsconfig.json').compilerOptions
+  {
+    noUnusedParameters: true,
+    noUnusedLocals: true,
+    strictNullChecks: false,
+    target: 'es6',
+    jsx: 'preserve',
+    moduleResolution: 'node',
+    declaration: true,
+    allowSyntheticDefaultImports: true,
+    baseUrl: './',
+    paths: {
+      'ant-design-vue': ['components/index.ts'],
+      'ant-design-vue/es/*': ['components/*']
+    },
+    lib: ['ESNext', 'DOM', 'DOM.Iterable'],
+    esModuleInterop: true,
+    experimentalDecorators: true,
+    noImplicitAny: false,
+    skipLibCheck: true,
+    allowJs: true,
+    importsNotUsedAsValues: 'preserve'
+  }
 )
 
 function buildLess() {

@@ -17,7 +17,10 @@
     "target": "es6",
     "skipLibCheck": true,
     "allowJs": true,
-    "importsNotUsedAsValues": "preserve"
+    "importsNotUsedAsValues": "preserve",
+    "outDir": "./lib",
+    "declaration": true
   },
-  "exclude": ["node_modules", "lib", "es", "dist", "scripts"]
+  "exclude": ["node_modules", "lib", "es", "dist", "scripts"],
+  "include": ["components/**/*.ts", "components/**/*.tsx"]
 }
