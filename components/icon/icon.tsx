@@ -78,7 +78,7 @@ export const Icon = installWrap(
     emits: emits(['click']),
     props: props(),
     setup(_props, { emit }) {
-      const handleClick = (e: MouseEvent) => {
+      const handleClick = () => {
         emit('click')
       }
 

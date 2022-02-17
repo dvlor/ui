@@ -1,6 +1,10 @@
 {
   "compilerOptions": {
     "baseUrl": "./",
+    "paths": {
+      "ui": ["components/index.ts"],
+      "ui/es/*": ["components/*"]
+    },
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "strictNullChecks": false,
     "moduleResolution": "node",

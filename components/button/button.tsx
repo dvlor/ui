@@ -39,8 +39,7 @@ export const Button = installWrap(
     props: props(),
     slots: ['icon'],
     setup(props, { emit }) {
-      const handleClick = (e: MouseEvent) => {
-        // e.stopPropagation()
+      const handleClick = () => {
         if (props.disabled) {
           return
         }
