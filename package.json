@@ -1,19 +1,28 @@
 {
-  "name": "test",
-  "version": "0.0.0",
+  "name": "d-ui-v3",
+  "version": "0.0.1",
+  "main": "lib/index.js",
+  "module": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "repository": {
+    "url": "https://github.com/dvlor/ui"
+  },
   "scripts": {
     "dev": "pnpm routes && vite serve site",
     "test": "cross-env NODE_ENV=test jest",
     "routes": "node ./scripts/routes.js",
-    "build": "node ./scripts/build/index.js"
+    "compile": "node ./scripts/build/index.js",
+    "build": "vite build"
   },
-  "config": {
-    "prefix": "u",
-    "componentPrefix": "u",
-    "classPrefix": "u"
-  },
+  "files": [
+    "lib",
+    "components"
+  ],
   "devDependencies": {
     "@babel/core": "^7.17.2",
+    "@babel/plugin-proposal-export-default-from": "^7.16.7",
+    "@babel/plugin-transform-object-assign": "^7.16.7",
+    "@babel/plugin-transform-runtime": "^7.17.0",
     "@babel/preset-env": "^7.16.11",
     "@babel/preset-typescript": "^7.16.7",
     "@testing-library/vue": "^6.4.2",
@@ -25,19 +34,24 @@
     "babel-jest": "26.1.0",
     "cross-env": "^7.0.3",
     "gulp": "^4.0.2",
+    "gulp-babel": "^8.0.0",
     "gulp-less": "^5.0.0",
+    "gulp-strip-code": "^0.1.4",
     "gulp-typescript": "^6.0.0-alpha.1",
     "jest": "26.0.0",
     "jest-environment-jsdom-fifteen": "^1.0.2",
     "less": "^4.1.2",
+    "merge2": "^1.4.1",
+    "rimraf": "^3.0.2",
     "through2": "^4.0.2",
     "ts-jest": "26.4.1",
     "typescript": "^4.5.5",
+    "vue-router": "4",
     "vite": "^2.7.2"
   },
   "dependencies": {
+    "@babel/runtime": "^7.17.2",
     "vue": "^3.2.30",
-    "vue-router": "4",
     "vue-types": "^4.1.1"
   }
 }

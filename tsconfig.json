@@ -3,7 +3,7 @@
     "baseUrl": "./",
     "paths": {
       "ui": ["components/index.ts"],
-      "ui/es/*": ["components/*"]
+      "ui_compile": ["lib/index.js"]
     },
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "strictNullChecks": false,
@@ -19,6 +19,7 @@
     "allowJs": true,
     "importsNotUsedAsValues": "preserve",
     "outDir": "./lib",
+    "allowSyntheticDefaultImports": true,
     "declaration": true
   },
   "exclude": ["node_modules", "lib", "es", "dist", "scripts"],

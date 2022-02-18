@@ -1,0 +1,16 @@
+@import '../style/theme/index.less';
+@import '../style/mixins/index.less';
+
+@input-prefix-cls: ~'@{class-prefix}-input';
+
+.@{input-prefix-cls} {
+  .transition();
+  border-radius: 3px;
+  color: @text-color;
+  border: solid 1px @border-color-base;
+  font-size: @font-size-base;
+  padding: @input-padding-vertical-base @input-padding-horizontal-base;
+  line-height: @line-height-base;
+  outline-color: @primary-color-outline;
+  position: relative;
+}

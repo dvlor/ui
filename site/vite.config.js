@@ -19,7 +19,8 @@ export default defineConfig(({ command, mode }) => {
     envPrefix: 'VITE_',
     resolve: {
       alias: {
-        ui: path.resolve(__dirname, '../components')
+        ui: path.resolve(__dirname, '../components'),
+        ui_compile: path.resolve(__dirname, '../lib')
       }
     },
     css: {

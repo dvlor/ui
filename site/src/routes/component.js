@@ -11,5 +11,9 @@ export const exampleRoutes = [
   {
     path: 'icon',
     component: () => import('../../../components/icon/example/index.vue')
+  },
+  {
+    path: 'input',
+    component: () => import('../../../components/input/example/index.vue')
   }
 ]
