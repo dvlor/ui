@@ -6,14 +6,9 @@
         <div class="item on group">
           <div class="title">组件</div>
           <div class="sub-menu">
-            <div class="item">
-              <div class="title">
-                <router-link to="/components/button">Button</router-link>
-              </div>
-            </div>
-            <div class="item">
-              <div class="title">
-                <router-link to="/components/icon">Icon</router-link>
+            <div class="item" v-for="component in components">
+              <div :class="{ title: true, on: current == component.path }">
+                <router-link :to="component.path">{{ component.title }} {{ component.subtitle }}</router-link>
               </div>
             </div>
           </div>
@@ -25,6 +20,27 @@
     </div>
   </aside>
 </template>
+
+<script lang="ts" setup>
+import { ref, watch } from '@vue/runtime-core'
+import { useRoute } from 'vue-router'
+import { exampleRoutes } from './routes/component'
+
+const route = useRoute()
+
+let current = ref(route.path)
+
+watch(
+  () => route.path,
+  () => {
+    current.value = route.path
+  }
+)
+
+const components = exampleRoutes.map((s) => {
+  return { title: s.meta.title, subtitle: s.meta.subtitle, type: s.meta.type, path: `/components/${s.path}` }
+})
+</script>
 
 <style lang="less">
 * {

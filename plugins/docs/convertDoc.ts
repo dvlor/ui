@@ -3,6 +3,10 @@ const scriptReg = /<script(.|\s)*?<\/script>/
 const styleReg = /<style(.|\s)*?<\/style>/
 const docReg = /<docs>(.|\s)*?<\/docs>/
 
+import md from 'markdown-it'
+
+const markdown = new md()
+
 export function splitVueTemplate(code: string) {
   function getStr(code: string, reg: RegExp, index = 0): string {
     const result = code.match(reg)
@@ -20,7 +24,8 @@ export function splitVueTemplate(code: string) {
     const example = `
 ${template}
 ${script}
-${style}`
+${style}
+`
 
     template = template.replace('<demo-box>', `<demo-box title='${title}' order='${order}' desc='${desc}' example='${example}' >`)
   }

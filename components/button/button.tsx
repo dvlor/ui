@@ -1,6 +1,6 @@
 import { emits, PropTypes } from '../_utils/vueExtend'
 import { defineComponent, ExtractPropTypes, PropType } from 'vue'
-import { installWrap } from '../_utils/types'
+import { withInstall } from '../_utils/types'
 import { Prefix } from '../_utils/prefix'
 import { ripple } from '../_utils/ripple'
 
@@ -31,9 +31,9 @@ const props = () => ({
 
 export type ButtonProp = Partial<ExtractPropTypes<ReturnType<typeof props>>>
 
-export const Button = installWrap(
-  'button',
+export const Button = withInstall(
   defineComponent({
+    name: 'button',
     components: { ripple },
     emits: emits(['click']),
     props: props(),

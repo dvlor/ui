@@ -1,41 +1,44 @@
 import { emits, PropTypes } from '../_utils/vueExtend'
 import { defineComponent, ExtractPropTypes } from 'vue'
-import { installWrap } from '../_utils/types'
+import { withInstall } from '../_utils/types'
 import { Prefix } from '../_utils/prefix'
 
-const props = () => ({
+const demoProps = () => ({
   // 大小
   size: PropTypes.oneOf(['smll', 'default', 'large'])
 })
 
-export type DemoProp = Partial<ExtractPropTypes<ReturnType<typeof props>>>
+const props = demoProps()
 
-export const Demo = installWrap(
-  'demo',
-  defineComponent({
-    emits: emits(['click']),
-    props: props(),
-    setup(props, { emit }) {
-      const handleClick = (e: MouseEvent) => {
-        e.stopPropagation()
-        emit('click')
-      }
-      return {
-        handleClick,
-        prop: {
-          ...props,
-          class: {
-            [`${Prefix.classPrefix}-demo`]: true
-          }
+export type DemoProp = Partial<ExtractPropTypes<ReturnType<typeof demoProps>>>
+
+const component = defineComponent({
+  MD: 'demo md',
+  name: 'demo',
+  emits: emits(['click']),
+  props: props,
+  setup(props, { emit }) {
+    const handleClick = (e: MouseEvent) => {
+      e.stopPropagation()
+      emit('click')
+    }
+    return {
+      handleClick,
+      prop: {
+        ...props,
+        class: {
+          [`${Prefix.classPrefix}-demo`]: true
         }
       }
-    },
-    render() {
-      return (
-        <div {...this.prop} onClick={this.handleClick}>
-          {this.$slots.default()}
-        </div>
-      )
     }
-  })
-)
+  },
+  render() {
+    return (
+      <div {...this.prop} onClick={this.handleClick}>
+        {this.$slots.default()}
+      </div>
+    )
+  }
+})
+
+export const Demo = withInstall(component)

@@ -10,6 +10,7 @@ const merge2 = require('merge2')
 const stripCode = require('gulp-strip-code')
 const babel = require('gulp-babel')
 const vue = require('@vitejs/plugin-vue')
+const del = require('delete')
 const resolve = require.resolve
 
 const libDir = path.join(__dirname, '../../lib')
@@ -195,7 +196,41 @@ function compile(modules) {
   const less = compile_less()
   const assets = compile_assets()
   const { tsFilesStream, tsd } = compile_ts()
+  const vue = compile_vue()
   return merge2([less, tsFilesStream, tsd, assets])
 }
 
-compile_vue()
+function compile_vue() {
+  let error = 0
+  const source = ['components/*/*.vue']
+
+  return gulp
+    .src(source)
+    .pipe(
+      through2.obj(function (file, _, next) {
+        const d = vue()
+        d.configResolved({ isProduction: true, root: './' })
+        d.buildStart()
+        d.transform(file.contents.toString(), file.path).then((s) => {
+          file.contents = Buffer.from(
+            s.code.replace(
+              'import _export_sfc from "plugin-vue:export-helper";',
+              `var _export_sfc = (sfc, props) => {
+  const target = sfc.__vccOpts || sfc;
+  for (const [key, val] of props) {
+    target[key] = val;
+  }
+  return target;
+};`
+            )
+          )
+          file.path = file.path.replace(/\.vue$/, '.js')
+          this.push(file)
+          next()
+        })
+      })
+    )
+    .pipe(gulp.dest(libDir))
+}
+
+compile()

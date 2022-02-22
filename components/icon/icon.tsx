@@ -1,9 +1,9 @@
 import { emits, PropTypes } from '../_utils/vueExtend'
 import { defineComponent, ExtractPropTypes } from 'vue'
-import { installWrap } from '../_utils/types'
+import { withInstall } from '../_utils/types'
 import { Prefix } from '../_utils/prefix'
 
-const props = () => ({
+const props: any = () => ({
   // 类型
   type: PropTypes.oneOf([
     'copy',
@@ -72,9 +72,9 @@ const props = () => ({
 
 export type IconProp = Partial<ExtractPropTypes<ReturnType<typeof props>>>
 
-export const Icon = installWrap(
-  'icon',
+export const Icon = withInstall(
   defineComponent({
+    name: 'icon',
     emits: emits(['click']),
     props: props(),
     setup(_props, { emit }) {

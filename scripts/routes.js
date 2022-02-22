@@ -17,9 +17,15 @@ async function generateRoutes() {
   const routes = `export const exampleRoutes = [
   ${components
     .map((component) => {
+      let content = fs.readFileSync(path.join(__dirname, `../components/${component}/index.md`)).toString()
+
+      let type = content.match(/type: (.*)/)[1]
+      let title = content.match(/title: (.*)/)[1]
+      let subtitle = content.match(/subtitle: (.*)/)[1]
       return `
   {
     path: '${component}',
+    meta: {doc: import('../../../components/${component}/index.md'), type: '${type}', title: '${title}', subtitle: '${subtitle}'},
     component: () => import('../../../components/${component}/example/index.vue')
   }`
     })

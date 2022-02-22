@@ -24,7 +24,9 @@ export default defineComponent({
         <u-icon style="font-size: 20px" v-show="!show" type="yincang" />
       </u-button>
     </div>
-    <pre v-show="show" class="coding">{{ example }}</pre>
+    <div v-show="show" class="coding markdown">
+      <pre>{{ example }}</pre>
+    </div>
   </div>
 </template>
 

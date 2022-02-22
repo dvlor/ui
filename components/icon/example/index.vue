@@ -1,6 +1,6 @@
 <template>
   <div v-for="i in icons" @click.native="copy(i)" class="item">
-    <u-icon :type="i" @click.native="copy(i)" />
+    <u-icon :type="i" />
   </div>
 </template>
 

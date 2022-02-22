@@ -3,6 +3,7 @@ import path from 'path'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import docs from '../plugins/docs'
+import md from '../plugins/md'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ command, mode }) => {
@@ -10,7 +11,7 @@ export default defineConfig(({ command, mode }) => {
     base: '/',
     root: './',
     mode,
-    plugins: [vueJsx(), docs(), vue()],
+    plugins: [vueJsx(), docs(), md(), vue()],
     publicDir: './public',
     cacheDir: './.vite',
     clearScreen: true,
