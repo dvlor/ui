@@ -3,6 +3,10 @@ const scriptReg = /<script(.|\s)*?<\/script>/
 const styleReg = /<style(.|\s)*?<\/style>/
 const docReg = /<docs>(.|\s)*?<\/docs>/
 
+function encodeHTML(html: string): string {
+  return html.replace(/</g, '&lt;').replace(/>/g, '&gt;')
+}
+
 export function splitVueTemplate(code: string) {
   function getStr(code: string, reg: RegExp, index = 0): string {
     const result = code.match(reg)
@@ -16,34 +20,26 @@ export function splitVueTemplate(code: string) {
     const order = getStr(doc, /order:(.*)/, 1).trim()
     const title = getStr(doc, /zh-CN:(.*)/, 1).trim()
     const desc = getStr(doc, /zh-CN\s\s(.*)/, 1).trim()
-    const example = `
+    let example = `
 ${template}
 ${script}
 ${style}
 `
 
     template = template.replace('<demo-box>', `<demo-box title='${title}' order='${order}' desc='${desc}' :example='example' >`)
-    if (script) {
-      script = `
-      ${script}
-      <script lang="ts">
-        const example = \`${example.replace(/</g, '&lt;').replace(/>/g, '&gt;')}\`
-      </script>
-    `
-    } else {
-      script = `
+
+    example = `
     <script setup lang="ts">
-        const example = \`${example.replace(/</g, '&lt;').replace(/>/g, '&gt;')}\`
+        const example = \`${encodeHTML(example)}\`
       </script>
     `
+
+    if (script) {
+      script = script + example.replace('<script setup lang="ts">', '<script lang="ts">')
+    } else {
+      script = example
     }
   }
-
-  console.log(`
-${template}
-${script}
-${style}
-  `)
 
   return `
 ${template}

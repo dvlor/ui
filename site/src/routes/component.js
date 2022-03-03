@@ -6,11 +6,6 @@ export const exampleRoutes = [
     component: () => import('../../../components/button/example/index.vue')
   },
   {
-    path: 'demo',
-    meta: {doc: import('../../../components/demo/index.md'), type: '通用', title: 'Demo', subtitle: '测试'},
-    component: () => import('../../../components/demo/example/index.vue')
-  },
-  {
     path: 'icon',
     meta: {doc: import('../../../components/icon/index.md'), type: '通用', title: 'Icon', subtitle: '图标'},
     component: () => import('../../../components/icon/example/index.vue')
