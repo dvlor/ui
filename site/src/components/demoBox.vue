@@ -25,7 +25,7 @@ export default defineComponent({
       </u-button>
     </div>
     <div v-show="show" class="coding markdown">
-      <pre>{{ example }}</pre>
+      <pre v-html="example"></pre>
     </div>
   </div>
 </template>
@@ -58,13 +58,15 @@ export default defineComponent({
     border-bottom: solid 1px @border-color-split;
   }
   .tool {
-    padding: 15px @padding-h;
+    padding: 0 @padding-h;
     font-size: 18px;
   }
 
   .coding {
     overflow: auto;
-    padding: 0 @padding-h 30px;
+    pre {
+      padding: 0 @padding-h;
+    }
   }
 }
 </style>

@@ -7,9 +7,7 @@
           <div class="title">组件</div>
           <div class="sub-menu">
             <div class="item" v-for="component in components">
-              <div :class="{ title: true, on: current == component.path }">
-                <router-link :to="component.path">{{ component.title }} {{ component.subtitle }}</router-link>
-              </div>
+              <div :class="{ title: true, on: current == component.path }" @click="goLink(component.path)">{{ component.title }} {{ component.subtitle }}</div>
             </div>
           </div>
         </div>
@@ -23,10 +21,11 @@
 
 <script lang="ts" setup>
 import { ref, watch } from '@vue/runtime-core'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { exampleRoutes } from './routes/component'
 
 const route = useRoute()
+const router = useRouter()
 
 let current = ref(route.path)
 
@@ -40,6 +39,10 @@ watch(
 const components = exampleRoutes.map((s) => {
   return { title: s.meta.title, subtitle: s.meta.subtitle, type: s.meta.type, path: `/components/${s.path}` }
 })
+
+const goLink = (path) => {
+  router.push(path)
+}
 </script>
 
 <style lang="less">

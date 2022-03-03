@@ -2,6 +2,9 @@
 @import '../style/mixins/index.less';
 
 @btn-prefix-cls: ~'@{class-prefix}-button';
+@btn-group-prefix-cls: ~'@{class-prefix}-button-group';
+
+@border-radius: 3px;
 
 .@{btn-prefix-cls} {
   .transition();
@@ -9,7 +12,7 @@
   display: inline-block;
   padding: calc(@font-size-base - 6px) calc(@font-size-base - 4px);
   cursor: pointer;
-  border-radius: 3px;
+  border-radius: @border-radius;
   color: @text-color;
   border: solid 1px @border-color-base;
   font-size: @font-size-base;
@@ -124,5 +127,32 @@
     color: @disabled-color;
     background-color: @disabled-bg;
     border-color: @disabled-color;
+  }
+}
+.@{btn-group-prefix-cls} {
+  display: inline-block;
+
+  + .@{btn-group-prefix-cls}{
+    margin-left: 1em;
+  }
+
+  .@{btn-prefix-cls} + .@{btn-prefix-cls}{
+    margin-left: -1px;
+  }
+  .@{btn-prefix-cls} {
+    border-radius: 0;
+  }
+  .@{btn-prefix-cls}:hover,.@{btn-prefix-cls}:focus{
+    z-index: 1;
+  }
+
+  .@{btn-prefix-cls}:first-child{
+    border-top-left-radius: @border-radius;
+    border-bottom-left-radius: @border-radius;
+  }
+
+  .@{btn-prefix-cls}:last-child{
+    border-top-right-radius: @border-radius;
+    border-bottom-right-radius: @border-radius;
   }
 }

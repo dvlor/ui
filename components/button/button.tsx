@@ -1,42 +1,18 @@
-import { emits, PropTypes } from '../_utils/vueExtend'
-import { defineComponent, ExtractPropTypes, PropType } from 'vue'
+import { emits } from '../_utils/vueExtend'
+import { defineComponent } from 'vue'
 import { withInstall } from '../_utils/types'
 import { Prefix } from '../_utils/prefix'
 import { ripple } from '../_utils/ripple'
+import { buttonProp } from './propType'
 
-const props = () => ({
-  // 大小
-  size: PropTypes.oneOf(['smll', 'default', 'large']),
-  // 是否禁用
-  disabled: PropTypes.bool,
-  // 加载中
-  loading: PropTypes.bool,
-  // 图标
-  icon: PropTypes.string,
-  // 防抖时间 小于等于0不做处理
-  debounceTime: PropTypes.number,
-  // 形状
-  shape: PropTypes.oneOf(['default', 'circle']),
-  // 类型
-  type: PropTypes.oneOf(['default', 'primary', 'dashed', 'link', 'text']),
-  danger: PropTypes.bool,
-  block: PropTypes.bool,
-  ghost: PropTypes.bool,
-  href: PropTypes.string,
-  target: PropTypes.string,
-  onClick: {
-    type: Function as PropType<(e: MouseEvent) => void>
-  }
-})
-
-export type ButtonProp = Partial<ExtractPropTypes<ReturnType<typeof props>>>
+export type { ButtonProp } from './propType'
 
 export const Button = withInstall(
   defineComponent({
     name: 'button',
     components: { ripple },
     emits: emits(['click']),
-    props: props(),
+    props: buttonProp(),
     slots: ['icon'],
     setup(props, { emit }) {
       const handleClick = () => {
@@ -69,16 +45,16 @@ export const Button = withInstall(
     render() {
       return this.showRipple ? (
         <ripple>
-          <div {...this.prop} onClick={this.handleClick}>
+          <button {...this.prop} onClick={this.handleClick}>
             {this.$slots.icon && this.$slots.icon()}
             {this.$slots.default()}
-          </div>
+          </button>
         </ripple>
       ) : (
-        <div {...this.prop} onClick={this.handleClick}>
+        <button {...this.prop} onClick={this.handleClick}>
           {this.$slots.icon && this.$slots.icon()}
           {this.$slots.default()}
-        </div>
+        </button>
       )
     }
   })

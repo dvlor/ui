@@ -4,7 +4,8 @@ import { Prefix } from './prefix'
 export const withInstall = <T>(component: T) => {
   const instance: any = component
   instance.install = function (app: App) {
-    app.component(`${Prefix.componentPrefix}${instance.name.toLowerCase()}`, component)
+    instance.name = `${Prefix.componentPrefix}${instance.name.toLowerCase()}`
+    app.component(instance.name, component)
   }
   return instance as T & Plugin
 }
