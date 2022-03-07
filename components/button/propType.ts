@@ -1,9 +1,16 @@
 import { PropTypes } from '../_utils/vueExtend'
 import type { PropType, ExtractPropTypes } from 'vue'
+import { tuple } from 'components/_utils/types'
+
+const type = tuple('default', 'primary', 'dashed', 'link', 'text')
+const size = tuple('small', 'default', 'large')
+const shape = tuple('default', 'circle')
 
 const buttonProp = () => ({
+  // 类型
+  type: PropTypes.oneOf(type).def('default'),
   // 大小
-  size: PropTypes.oneOf(['smll', 'default', 'large']),
+  size: PropTypes.oneOf(size).def('default'),
   // 是否禁用
   disabled: PropTypes.bool,
   // 加载中
@@ -13,9 +20,7 @@ const buttonProp = () => ({
   // 防抖时间 小于等于0不做处理
   debounceTime: PropTypes.number,
   // 形状
-  shape: PropTypes.oneOf(['default', 'circle']),
-  // 类型
-  type: PropTypes.oneOf(['default', 'primary', 'dashed', 'link', 'text']),
+  shape: PropTypes.oneOf(shape).def('default'),
   // 危险按钮
   danger: PropTypes.bool,
   // 块状按钮
@@ -38,7 +43,7 @@ export { buttonProp }
 
 const buttonGroupProp = () => ({
   // 大小
-  size: PropTypes.oneOf(['smll', 'default', 'large']),
+  size: PropTypes.oneOf(size).def('default'),
   onClick: {
     type: Function as PropType<(e: MouseEvent) => void>
   }

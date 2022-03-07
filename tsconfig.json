@@ -22,6 +22,5 @@
     "allowSyntheticDefaultImports": true,
     "declaration": true
   },
-  "exclude": ["node_modules", "lib", "es", "dist", "scripts"],
-  "include": ["components/**/*.ts", "components/**/*.tsx"]
+  "exclude": ["node_modules", "lib", "es", "dist", "scripts", "**/test/**"]
 }

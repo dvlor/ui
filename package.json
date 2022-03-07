@@ -11,7 +11,8 @@
     "dev": "yarn routes && vite serve site",
     "test": "cross-env NODE_ENV=test jest",
     "routes": "node ./scripts/routes.js",
-    "compile": "node ./scripts/build/index.js"
+    "compile": "node ./scripts/build/index.js",
+    "component": "node ./scripts/component/index.js"
   },
   "files": [
     "lib",

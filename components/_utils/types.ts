@@ -9,3 +9,5 @@ export const withInstall = <T>(component: T) => {
   }
   return instance as T & Plugin
 }
+
+export const tuple = <T extends string[]>(...args: T) => args

@@ -22,6 +22,7 @@
   &.@{btn-prefix-cls}-block{
     display: block;
     text-align: center;
+    width: 100%;
     + .@{btn-prefix-cls}.@{btn-prefix-cls}-block{
       margin-left: unset;
       margin-top: calc(@font-size-base / 2);
@@ -69,6 +70,25 @@
         color: @primary-color-active;
       }
     }
+
+    &.@{btn-prefix-cls}-danger{
+      background-color: @btn-danger-bg;
+      color: @btn-danger-color;
+      border: solid 1px @btn-danger-border;
+
+      &:hover:not(.@{btn-prefix-cls}-disabled) {
+        background-color: @menu-highlight-danger-color;
+        border-color: @menu-highlight-danger-color;
+        color: @btn-danger-color;
+      }
+
+      &:active:not(.@{btn-prefix-cls}-disabled)  {
+        background-color: @red-7;
+        border-color: @red-7;
+      }
+    }
+
+    
   }
   &.@{btn-prefix-cls}-dashed{
     border-style: dashed;

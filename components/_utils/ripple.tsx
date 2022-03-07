@@ -1,87 +1,113 @@
 import { defineComponent, nextTick } from 'vue'
 
+const ListenEventName = 'click'
+
 export const ripple = defineComponent({
   data() {
     return {
-      state: false,
       dom: undefined,
-      style: undefined
+      style: undefined,
+      animationStart: false
     }
   },
   methods: {
     clickHandler() {
       this.reset()
-      this.state = true
+      this.addShadow()
+    },
+    addShadow() {
       let dom = this.dom as HTMLElement
-      let computedStyle = getComputedStyle(dom)
-
-      let color = computedStyle.getPropertyValue('border-color') || computedStyle.getPropertyValue('background-color')
-      let width = dom.offsetWidth
-      let height = dom.offsetHeight
-      console.log(computedStyle.getPropertyValue('padding-left').replace('px', ''))
-      let paddingLeft = parseFloat(computedStyle.getPropertyValue('padding-left').replace('px', '')) || 0
-      let paddingTop = parseFloat(computedStyle.getPropertyValue('padding-top').replace('px', '')) || 0
-      let borderRadius = computedStyle.getPropertyValue('border-radius')
-      let borderWidth = parseFloat(computedStyle.getPropertyValue('border-width').replace('px', '')) || 0
-      this.style = document.createElement('style')
-      this.style.innerHTML = `
-        [ripple]::after{
+      if (!this.style) {
+        let computedStyle = getComputedStyle(dom)
+        let color = computedStyle.getPropertyValue('border-color') || computedStyle.getPropertyValue('background-color')
+        let width = dom.offsetWidth
+        let height = dom.offsetHeight
+        let borderRadius = computedStyle.getPropertyValue('border-radius')
+        let borderLeftWidth = parseFloat(computedStyle.getPropertyValue('border-left-width').replace('px', '')) || 0
+        let borderTopWidth = parseFloat(computedStyle.getPropertyValue('border-top-width').replace('px', '')) || 0
+        this.style = document.createElement('style')
+        this.style.innerHTML = `
+        [ripple='true']::after{
           content: '';
           display: block;
           position: absolute;
           z-index: -1;
+          left: 0;
+          top: 0;
           width: ${width}px;
           height: ${height}px;
-          margin: -${height - paddingTop - borderWidth}px 0 0 -${paddingLeft + borderWidth}px;
+          margin: -${borderLeftWidth}px 0 0 -${borderTopWidth}px;
           border-radius: ${borderRadius || 0};
-          box-shadow: 0 0 0px 0 ${color};
-          transition: all .3s;
+          box-shadow: 0 0 0 0 ${color};
+          opacity: 0;
+          animation: ripple .5s linear;
         }
-        [ripple='true']::after{
-          box-shadow: 0 0 3px 0 ${color};
+        @keyframes ripple {
+          0% {
+            box-shadow: 0 0 0 0 ${color};
+            opacity: 0;
+          }
+          30% {
+            box-shadow: 0 0 2px 0 ${color};
+            opacity: .65;
+          }
+          100%{
+            box-shadow: 0 0 4px 4px ${color};
+            opacity: 0;
+          }
         }
       `
 
-      dom.addEventListener('transitionend', () => this.onTransitionend())
+        document.head.appendChild(this.style)
+      }
 
-      document.head.appendChild(this.style)
       dom.setAttribute('ripple', 'true')
     },
     reset() {
-      if (this.state) {
-        let dom = this.dom as HTMLElement
-        this.state = false
-
-        dom.setAttribute('ripple', 'false')
-        dom.removeEventListener('transitionend', () => this.onTransitionend())
-      }
-    },
-    onTransitionend() {
-      this.state = false
       let dom = this.dom as HTMLElement
       dom.setAttribute('ripple', 'false')
+    },
+    onTransitionend() {
+      if (!this.transitionStart) {
+        return
+      }
+      this.transitionStart = false
       this.style.remove()
+      let dom = this.dom as HTMLElement
+      dom.setAttribute('ripple', 'false')
+      this.style = undefined
+    },
+    onTransitionstart(e: TransitionEvent) {
+      if (e.pseudoElement === '::after') {
+        this.transitionStart = true
+      }
+    },
+    bind() {
+      this.$el.addEventListener('animationstart', this.onTransitionstart, true)
+      this.$el.addEventListener('animationend', this.onTransitionend, true)
+      this.$el.addEventListener(ListenEventName, this.clickHandler, true)
+    },
+    unbind() {
+      this.$el.removeEventListener(ListenEventName, this.clickHandler, true)
     }
   },
   mounted() {
     nextTick(() => {
       this.dom = this.$el
       this.dom.setAttribute('ripple', 'false')
-      this.$el.addEventListener('click', this.clickHandler, true)
+      this.bind()
     })
   },
   updated() {
     this.dom = this.$el
     this.dom.setAttribute('ripple', 'false')
-    this.$el.addEventListener('click', this.clickHandler, true)
+    this.bind()
   },
   beforeUpdate() {
-    this.reset()
-    this.$el.removeEventListener('click', this.clickHandler, true)
+    this.unbind()
   },
   beforeUnmount() {
-    this.reset()
-    this.$el.removeEventListener('click', this.clickHandler, true)
+    this.unbind()
   },
   render() {
     return this.$slots.default()[0]

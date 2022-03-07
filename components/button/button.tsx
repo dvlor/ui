@@ -1,5 +1,5 @@
 import { emits } from '../_utils/vueExtend'
-import { defineComponent } from 'vue'
+import { computed, defineComponent } from 'vue'
 import { withInstall } from '../_utils/types'
 import { Prefix } from '../_utils/prefix'
 import { ripple } from '../_utils/ripple'
@@ -7,12 +7,14 @@ import { buttonProp } from './propType'
 
 export type { ButtonProp } from './propType'
 
+const props = buttonProp()
+
 export const Button = withInstall(
   defineComponent({
     name: 'button',
     components: { ripple },
     emits: emits(['click']),
-    props: buttonProp(),
+    props,
     slots: ['icon'],
     setup(props, { emit }) {
       const handleClick = () => {
@@ -25,33 +27,36 @@ export const Button = withInstall(
         emit('click')
       }
 
-      let className = {
-        [`${Prefix.classPrefix}button`]: true,
-        [`${Prefix.classPrefix}button-danger`]: props.danger,
-        [`${Prefix.classPrefix}button-${props.type}`]: !!props.type,
-        [`${Prefix.classPrefix}button-ghost`]: !!props.ghost,
-        [`${Prefix.classPrefix}button-disabled`]: !!props.disabled,
-        [`${Prefix.classPrefix}button-block`]: !!props.block
-      }
+      let className = computed(() => {
+        return {
+          [`${Prefix.classPrefix}button`]: true,
+          [`${Prefix.classPrefix}button-danger`]: props.danger,
+          [`${Prefix.classPrefix}button-${props.type}`]: !!props.type,
+          [`${Prefix.classPrefix}button-ghost`]: !!props.ghost,
+          [`${Prefix.classPrefix}button-disabled`]: !!props.disabled,
+          [`${Prefix.classPrefix}button-block`]: !!props.block
+        }
+      })
 
       return {
         handleClick,
         showRipple: props.type !== 'text' && props.type !== 'link' && !props.disabled,
+        className,
         prop: {
-          class: className
+          ...props
         }
       }
     },
     render() {
       return this.showRipple ? (
         <ripple>
-          <button {...this.prop} onClick={this.handleClick}>
+          <button {...this.prop} class={this.className} onClick={this.handleClick}>
             {this.$slots.icon && this.$slots.icon()}
             {this.$slots.default()}
           </button>
         </ripple>
       ) : (
-        <button {...this.prop} onClick={this.handleClick}>
+        <button {...this.prop} class={this.className} onClick={this.handleClick}>
           {this.$slots.icon && this.$slots.icon()}
           {this.$slots.default()}
         </button>
