@@ -1,9 +1,9 @@
 import { computed, defineComponent } from 'vue'
 import { withInstall } from '../_utils/types'
 import { Prefix } from '../_utils/prefix'
-import { checkboxProp } from './propType.ts.tpl'
+import { checkboxProp } from './propType'
 
-export type { CheckboxProp } from './propType.ts.tpl'
+export type { CheckboxProp } from './propType'
 
 const props = checkboxProp()
 

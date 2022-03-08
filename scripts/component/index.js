@@ -1,54 +1,149 @@
-const argv = process.argv
 const path = require('path')
 const fs = require('fs')
+const inquirer = require('inquirer')
+const consola = require('consola')
 
-const component = ''
+// 组件入口路径
+const compontentPath = path.join(__dirname, '../../components/components.ts')
+// 样式入口路径
+const stylePath = path.join(__dirname, '../../components/style.ts')
+// 类型说明入口路径
+const typesPath = path.join(__dirname, '../../typings/global.d.ts')
+// 组件所在文件夹
+const dst = path.join(__dirname, '../../components/')
 
-switch (argv[2]) {
-  case '-add':
-  case '-a':
-    if (argv.length <= 3) {
-      console.log('组件名称不能为空')
-    }
-    for (let index = 3; index < argv.length; index++) {
-      addComponent(argv[index])
-    }
-    break
-  case '-remove':
-  case '-r':
-    if (argv.length <= 3) {
-      console.log('组件名称不能为空')
-    }
-    for (let index = 3; index < argv.length; index++) {
-      removeComponent(argv[index])
-    }
-    break
+main()
+
+async function main() {
+  const argv = process.argv
+  const component = ''
+
+  switch (argv[2]) {
+    case '-add':
+    case '-a':
+      if (argv.length <= 3) {
+        consola.info('组件名称不能为空')
+        return
+      }
+      inquirer
+        .prompt([{ type: 'confirm', message: '确定要创建组件吗', name: 'sure' }])
+        .then(async (answers) => {
+          if (answers.sure) {
+            for (let index = 3; index < argv.length; index++) {
+              if (!argv[index]) {
+                continue
+              }
+              consola.log(`创建组件 ${argv[index]}`)
+              const state = await addComponent(argv[index])
+              if (state) {
+                consola.success('完成')
+              } else {
+                consola.success('组件已存在')
+              }
+            }
+          }
+        })
+        .catch((error) => {
+          if (error.isTtyError) {
+            consola.error(error)
+          } else {
+            consola.error(error)
+          }
+        })
+      break
+    case '-remove':
+    case '-r':
+      if (argv.length <= 3) {
+        consola.info('组件名称不能为空')
+        return
+      }
+      inquirer
+        .prompt([{ type: 'confirm', message: '确定要删除组件吗', name: 'sure' }])
+        .then(async (answers) => {
+          if (answers.sure) {
+            for (let index = 3; index < argv.length; index++) {
+              if (!argv[index]) {
+                continue
+              }
+              consola.log(`删除组件 ${argv[index]}`)
+              const state = await removeComponent(argv[index])
+              if (state) {
+                consola.success('完成')
+              } else {
+                consola.success('组件不存在')
+              }
+            }
+          }
+        })
+        .catch((error) => {
+          if (error.isTtyError) {
+            consola.error(error)
+          } else {
+            consola.error(error)
+          }
+        })
+      break
+  }
 }
 
-function removeComponent(name) {
+// 删除组件
+async function removeComponent(name) {
   name = name.replace(/\w/, ($0) => $0.toUpperCase())
-  unRegisterComponent(name)
-}
-
-function addComponent(name) {
-  name = name.replace(/\w/, ($0) => $0.toUpperCase())
-  generateComponentFiles(name)
-  registerComponent(name)
-}
-
-//
-async function generateComponentFiles(name) {
-  const dst = path.join(__dirname, '../../component/', name)
-  try {
-    fs.statSync(dst)
+  const state = await removeComponentFiles(name)
+  if (state) {
+    unRegisterComponent(name)
+    return true
+  } else {
     return false
+  }
+}
+
+// 新增组件
+async function addComponent(name) {
+  name = name.replace(/\w/, ($0) => $0.toUpperCase())
+  // 基础文件拷贝
+  const state = await generateComponentFiles(name)
+  if (state) {
+    // 组件注册
+    registerComponent(name)
+    return true
+  } else {
+    return false
+  }
+}
+
+// 删除基础文件
+async function removeComponentFiles(name) {
+  let dir = path.join(dst, name)
+  // 文件夹不存在 直接跳过
+  try {
+    fs.statSync(dir)
   } catch (e) {
-    fs.mkdirSync(dst)
+    return false
   }
 
-  await copyDir(path.join(__dirname, 'template'), dst, name)
+  // 删除文件夹
+  fs.rmSync(dir, { recursive: true, force: true })
+  return true
 }
 
+//拷贝基础文件
+async function generateComponentFiles(name) {
+  let dir = path.join(dst, name)
+  // 文件夹存在 直接跳过
+  try {
+    fs.statSync(dir)
+    return false
+  } catch (e) {
+    fs.mkdirSync(dir)
+  }
+
+  // 拷贝文件夹
+  await copyDir(path.join(__dirname, 'template'), dir, name)
+  return true
+}
+
+// 拷贝文件夹
 async function copyDir(src, dst, name) {
   const dirs = fs.opendirSync(src)
   try {
@@ -61,13 +156,14 @@ async function copyDir(src, dst, name) {
         try {
           fs.accessSync(dstDir)
         } catch {
-          console.log(dstDir)
           fs.mkdirSync(dstDir)
         }
         await copyDir(srcFile, dstDir, name)
       } else {
+        // 文件名处理
         const dstFilePath = path.join(dst, dir.name.replace('component', name).replace('.tpl', ''))
         let content = fs.readFileSync(srcFile).toString()
+        // 文件内容处理
         content = content.replace(/\$\{name\}/g, name)
         content = content.replace(/\$\{name_camcel\}/g, name_camel(name))
         content = content.replace(/\$\{name_pascal\}/g, name_pascal(name))
@@ -76,22 +172,22 @@ async function copyDir(src, dst, name) {
       }
     }
   } catch (e) {
-    console.log(e)
+    throw e
   }
 }
 
 // 注册组件
 function registerComponent(name) {
+  // 引入并导出组件
   const component = `
 export { ${name} } from './${name}/index'
 export type { ${name}Prop } from './${name}/index'
 `
+  // 引入样式
   const style = `import './${name}/style.less'
 `
-  const types = `U${name}: typeof import('ui')['${name}']\r  `
-  const compontentPath = path.join(__dirname, '../../component/components.ts')
-  const stylePath = path.join(__dirname, '../../component/style.ts')
-  const typesPath = path.join(__dirname, '../../component/global.d.ts')
+  // 导入类型
+  const types = `    U${name}: typeof import('ui')['${name}']\n`
 
   fs.writeFileSync(compontentPath, `${fs.readFileSync(compontentPath).toString()}${component}`)
   fs.writeFileSync(stylePath, `${fs.readFileSync(stylePath).toString()}${style}`)
@@ -100,23 +196,23 @@ export type { ${name}Prop } from './${name}/index'
     `${fs
       .readFileSync(typesPath)
       .toString()
-      .replace(/\}\s\}/, `${types}  }\n}`)}`
+      .replace(/  \}\s\}/, `${types}  }\n}`)}`
   )
 }
 
 // 清除组件注册
 function unRegisterComponent(name) {
+  // 引入并导出组件
   const component = `
 export { ${name} } from './${name}/index'
 export type { ${name}Prop } from './${name}/index'
 `
+  // 引入样式
   const style = `import './${name}/style.less'
 `
+  // 导入类型
   const types = `    U${name}: typeof import('ui')['${name}']
 `
-  const compontentPath = path.join(__dirname, '../../component/components.ts')
-  const stylePath = path.join(__dirname, '../../component/style.ts')
-  const typesPath = path.join(__dirname, '../../component/global.d.ts')
 
   const src = fs.readFileSync(compontentPath).toString()
   fs.writeFileSync(compontentPath, `${src.replace(component, '')}`)

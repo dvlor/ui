@@ -1,5 +1,5 @@
-import { tuple } from 'components/_utils/types'
-import { PropTypes } from 'components/_utils/vueExtend'
+import { tuple } from '../_utils/types'
+import { PropTypes } from '../_utils/vueExtend'
 import { ExtractPropTypes } from 'vue'
 
 const size = tuple('smll', 'default', 'large')

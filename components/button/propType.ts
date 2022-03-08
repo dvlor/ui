@@ -1,6 +1,6 @@
 import { PropTypes } from '../_utils/vueExtend'
 import type { PropType, ExtractPropTypes } from 'vue'
-import { tuple } from 'components/_utils/types'
+import { tuple } from '../_utils/types'
 
 const type = tuple('default', 'primary', 'dashed', 'link', 'text')
 const size = tuple('small', 'default', 'large')

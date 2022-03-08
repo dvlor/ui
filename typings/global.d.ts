@@ -4,6 +4,8 @@ declare module 'vue' {
     UButton: typeof import('ui')['Button']
     UButtonGroup: typeof import('ui')['ButtonGroup']
     UIcon: typeof import('ui')['Icon']
+    UCheckbox: typeof import('ui')['Checkbox']
+    URadio: typeof import('ui')['Radio']
   }
 }
 

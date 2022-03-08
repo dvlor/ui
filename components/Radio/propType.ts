@@ -4,7 +4,7 @@ import { tuple } from '../_utils/types'
 
 const type = tuple('default', 'primary', 'dashed', 'link', 'text')
 
-const ${name_camcel}Prop = () => ({
+const radioProp = () => ({
   // 类型
   type: PropTypes.oneOf(type).def('default'),
   action: {
@@ -12,7 +12,6 @@ const ${name_camcel}Prop = () => ({
   }
 })
 
-export type ${name_pascal}Prop = Partial<ExtractPropTypes<ReturnType<typeof ${name_camcel}Prop>>>
+export type RadioProp = Partial<ExtractPropTypes<ReturnType<typeof radioProp>>>
 
-export { ${name_camcel}Prop }
-
+export { radioProp }
